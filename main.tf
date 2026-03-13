@@ -49,13 +49,13 @@ resource "aws_sqs_queue" "sqs_notificar_falha" {
 }
 
 resource "aws_ssm_parameter" "queue_name_video_processing" {
-  name  = "AWS_SQS_QUEUE_NAME_VIDEO_PROCESSING"
+  name  = "SQS_QUEUE_NAME_VIDEO_PROCESSING"
   type  = "String"
   value = aws_sqs_queue.sqs_processar_video.url
 }
 
 resource "aws_ssm_parameter" "queue_name_notification" {
-  name  = "AWS_SQS_QUEUE_NAME_NOTIFICATION"
+  name  = "SQS_QUEUE_NAME_NOTIFICATION"
   type  = "String"
   value = aws_sqs_queue.sqs_notificar_falha.url
 }
@@ -72,7 +72,7 @@ resource "aws_s3_bucket" "my_bucket" {
 }
 
 resource "aws_ssm_parameter" "bucket_name" {
-  name  = "AWS_S3_BUCKET"
+  name  = "S3_BUCKET"
   type  = "String"
   value = aws_s3_bucket.my_bucket.bucket
 }
