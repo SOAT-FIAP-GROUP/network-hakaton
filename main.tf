@@ -48,6 +48,17 @@ resource "aws_sqs_queue" "sqs_notificar_falha" {
   tags = local.tags
 }
 
+resource "aws_ssm_parameter" "queue_name_video_processing" {
+  name  = "AWS_SQS_QUEUE_NAME_VIDEO_PROCESSING"
+  type  = "String"
+  value = aws_sqs_queue.sqs_processar_video.url
+}
+
+resource "aws_ssm_parameter" "queue_name_notification" {
+  name  = "AWS_SQS_QUEUE_NAME_NOTIFICATION"
+  type  = "String"
+  value = aws_sqs_queue.sqs_notificar_falha.url
+}
 
 #=================================================
 #               S3 UPLOADS/DOWNLOADS
@@ -58,6 +69,12 @@ resource "aws_s3_bucket" "my_bucket" {
 
   tags = local.tags
 
+}
+
+resource "aws_ssm_parameter" "bucket_name" {
+  name  = "AWS_S3_BUCKET"
+  type  = "String"
+  value = aws_s3_bucket.my_bucket.bucket
 }
 
 #=================================================
@@ -125,4 +142,23 @@ resource "aws_cognito_user_pool_domain" "domain" {
   count        = var.enable_user_pool_domain ? 1 : 0
   domain       = var.user_pool_domain_prefix
   user_pool_id = aws_cognito_user_pool.user_pool.id
+}
+
+
+resource "aws_ssm_parameter" "cognito_client_id" {
+  name  = "COGNITO_CLIENT_ID"
+  type  = "String"
+  value = aws_cognito_user_pool_client.user_pool_client.id
+}
+
+resource "aws_ssm_parameter" "cognito_client_secret" {
+  name  = "COGNITO_CLIENT_SECRET"
+  type  = "String"
+  value = aws_cognito_user_pool_client.user_pool_client.client_secret
+}
+
+resource "aws_ssm_parameter" "cognito_user_pool_id" {
+  name  = "COGNITO_USER_POOL_ID"
+  type  = "String"
+  value = aws_cognito_user_pool.user_pool.id
 }
